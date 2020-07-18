@@ -1,0 +1,22 @@
+package: .
+import:
+- package: crypto/tls
+- package: encoding/json
+- package: flag
+- package: fmt
+- package: github.com/golang/glog
+- package: io/ioutil
+- package: k8s.io/api
+  version: ~0.20.0-alpha.0
+  subpackages:
+  - admission/v1beta1
+  - core/v1
+- package: k8s.io/apimachinery
+  version: ~0.20.0-alpha.0
+  subpackages:
+  - pkg/apis/meta/v1
+- package: net/http
+- package: os
+  subpackages:
+  - signal
+- package: syscall
