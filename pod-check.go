@@ -28,8 +28,11 @@ var (
 
 func main() {
 
-	flag.StringVar(&tlscert, "tlsCertFile", "/etc/certs/cert.pem", "File contaains the X509 Certificate for HTTPS")
-	flag.StringVar(&tlskey, "tlsKeyFile", "/etc/certs/key.pem", "File containing the X509 private key")
+	certpem := getEnv("CERT_FILE", "/etc/certs/cert.pem") 
+	keypem := getEnv("KEY_FILE", "/etc/certs/key.pem")
+
+	flag.StringVar(&tlscert, "tlsCertFile", certpem, "File contaains the X509 Certificate for HTTPS")
+	flag.StringVar(&tlskey, "tlsKeyFile", keypem, "File containing the X509 private key")
 
 	flag.Parse()
 
