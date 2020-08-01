@@ -1,0 +1,25 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: "pod-kuku"
+webhooks:
+- name: "pod-kuku"
+  namespaceSelector:
+    matchExpressions:
+    - key: admission.il.redhat.io/podnaming
+      operator: In
+      values: ["True"]
+  rules:
+  - apiGroups:   [""]
+    apiVersions: ["v1"]
+    operations:  ["CREATE"]
+    resources:   ["pods"]
+    scope:       "Namespaced"
+  clientConfig:
+    service:
+      namespace: "validate-kuku-pod"
+      name: "kuku-service"
+    caBundle: "PRIVATE_CA_BUNDLE"
+  admissionReviewVersions: ["v1", "v1beta1"]
+  sideEffects: None
+  timeoutSeconds: 5
