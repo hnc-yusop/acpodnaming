@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acpodnaming
+  namespace: kube-acpodnaming
+spec:
+  selector:
+    matchLabels:
+      app: acpodnaming
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: acpodnaming
+    spec:
+      containers:
+        - name: acpodnaming
+          image: quay.io/ooichman/acpodnaming
+          ports:
+            - containerPort: 8080
+          env:
+          - name: CERT_FILE
+            value: '/etc/certs/cert.pem'
+          - name: KEYFILE
+            value: '/etc/certs/key.pem'
+          - name: PORT 
+            value: '8080'
+          volumeMounts:
+          - name: acpodnaming-certs
+            mountPath: /etc/certs
+            readOnly: true
+      volumes:
+      - name: acpodnaming-certs
+        secret:
+          secretName: acpodnaming-tls
+
