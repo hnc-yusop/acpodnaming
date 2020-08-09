@@ -15,4 +15,4 @@ spec:
     spec:
       containers:
         - name: ubuntu-notworking
-          image: docker.io/library/ubuntu
+          image: quay.io/ooichman/ubuntu-minimal

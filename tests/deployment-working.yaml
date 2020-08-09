@@ -15,4 +15,4 @@ spec:
     spec:
       containers:
         - name: iperf-check
-          image: docker.io/library/ubuntu
+          image: quay.io/ooichman/ubuntu-minimal
