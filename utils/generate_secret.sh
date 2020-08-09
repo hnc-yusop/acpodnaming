@@ -45,6 +45,6 @@ done
 
 # Generate the Secret
 kubectl create secret generic "${service}"-tls \
---from-file=key.pem=/root/acpodnaming/utils/validate.key \
---from-file=cert.pem=/root/acpodnaming/utils/validate.crt \
+--from-file=key.pem=`pwd`/validate.key \
+--from-file=cert.pem=`pwd`/validate.crt \
 -n "${namespace}"

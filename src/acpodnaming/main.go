@@ -10,7 +10,7 @@ import (
 	  // for Kubernetes 
 	  "k8s.io/api/admission/v1beta1"
 	  "k8s.io/api/core/v1"
-	  matav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	  metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	  "regexp"
 )
 
@@ -40,7 +40,7 @@ func (gs *myValidServerhandler) serve(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	arRequest := v1beta1.AdmissionReview{}
+	arRequest := &v1beta1.AdmissionReview{}
 	if err := json.Unmarshal(Body, arRequest); err != nil {
 		glog.Error("incorrect Body")
 		http.Error(w, "incorrect Body", http.StatusBadRequest)
@@ -56,30 +56,34 @@ func (gs *myValidServerhandler) serve(w http.ResponseWriter, r *http.Request) {
 
 	podnamingReg := regexp.MustCompile(`kuku`)
 	if podnamingReg.MatchString(string(pod.Name)) {
-		return
+		fmt.Println("the pod name is up to standard")		
 	} else {
 		glog.Error("the pod does not contain \"kuku\"")
-		http.Error(w, "the pod does not contain \"kuku\"", http.StatusBadRequest)
+		http.Error(w, "the pod does not contain \"kuku\"" , http.StatusBadRequest)
 		return
 	}
 
-	arResponse := v1beta1.AdmissionReview {
-		Response: &v1beta1.AdmissionResponse {
-			Allowed: false,
-			Result: &matav1.Status{
-				Message: "we are just making sure the Pod has the right Name",
-			},
+	arResponse := v1beta1.AdmissionReview{
+		Response: &v1beta1.AdmissionResponse{
+			Result:  &metav1.Status{},
+			Allowed: true,
 		},
 	}
 
+	arResponse.APIVersion = "admission.k8s.io/v1"
+	arResponse.Kind = arRequest.Kind
+	arResponse.Response.UID = arRequest.Request.UID
+	
+
 	resp, err := json.Marshal(arResponse)
+//	fmt.Printf("%s\n",resp)
+
 	if err != nil {
 		glog.Error("Can't encode response:", err)
 		http.Error(w, fmt.Sprintf("couldn't encode response: %v", err), http.StatusInternalServerError)
 	}
 
-	glog.Infof("Ready to write  response ...")
-	if _, err := w.Write(resp); err != nil {
+	if _ , err := w.Write(resp); err != nil {
 		glog.Error("Can't write response", err)
 		http.Error(w, fmt.Sprintf("cloud not write response: %v", err), http.StatusInternalServerError)
 	}

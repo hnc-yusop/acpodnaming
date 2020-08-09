@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubuntu-notworking
+  namespace: podnaming-test
+spec:
+  selector:
+    matchLabels:
+      app: ubuntu-notworking
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ubuntu-notworking
+    spec:
+      containers:
+        - name: ubuntu-notworking
+          image: docker.io/library/ubuntu
