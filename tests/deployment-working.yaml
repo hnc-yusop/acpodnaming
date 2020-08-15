@@ -14,5 +14,5 @@ spec:
         app: ubuntu-kuku
     spec:
       containers:
-        - name: iperf-check
+        - name: ubuntu-minimal
           image: quay.io/ooichman/ubuntu-minimal

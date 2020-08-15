@@ -54,29 +54,25 @@ func (gs *myValidServerhandler) serve(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	podnamingReg := regexp.MustCompile(`kuku`)
-	if podnamingReg.MatchString(string(pod.Name)) {
-		fmt.Println("the pod name is up to standard")		
-	} else {
-		glog.Error("the pod does not contain \"kuku\"")
-		http.Error(w, "the pod does not contain \"kuku\"" , http.StatusBadRequest)
-		return
-	}
-
 	arResponse := v1beta1.AdmissionReview{
 		Response: &v1beta1.AdmissionResponse{
 			Result:  &metav1.Status{},
-			Allowed: true,
+			Allowed: false,
 		},
 	}
+
+	podnamingReg := regexp.MustCompile(`kuku`)
+
+	if podnamingReg.MatchString(string(pod.Name)) {
+		fmt.Printf("the pod %s is up to the name standard", pod.Name)
+		arResponse.Response.Allowed = true	
+	} 
 
 	arResponse.APIVersion = "admission.k8s.io/v1"
 	arResponse.Kind = arRequest.Kind
 	arResponse.Response.UID = arRequest.Request.UID
 	
-
 	resp, err := json.Marshal(arResponse)
-//	fmt.Printf("%s\n",resp)
 
 	if err != nil {
 		glog.Error("Can't encode response:", err)
