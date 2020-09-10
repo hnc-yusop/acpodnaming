@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: acpodnaming
-          image: quay.io/ooichman/acpodnaming
+          image: "REPLACE_IMAGE"
           ports:
             - containerPort: 8080
           env:
