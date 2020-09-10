@@ -123,9 +123,9 @@ openssl req -in validate.csr -noout -text | grep DNS
  openssl verify -CAfile ca.crt validate.crt
 
 # Generating the CA_BUNDLE base64
-echo "your CA base64 is :"
+echo "Generating your CA with BASE64 :"
 AC_CA_BUNDLE=`cat ca.crt | base64 -w0`
-echo $AC_CA_BUNDLE
+echo "ca_base64: $AC_CA_BUNDLE"
 mkdir certs
 cp validate.key certs/key.pem
 cp validate.crt certs/cert.pem
