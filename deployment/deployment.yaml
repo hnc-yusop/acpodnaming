@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: acpodnaming
-          image: "REPLACE_IMAGE"
+          image: image-registry.openshift-image-registry.svc:5000/kube-acpodnaming/acpodnaming:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
